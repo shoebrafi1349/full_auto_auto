@@ -57,12 +57,12 @@ pip install -r requirements.txt
 Download from https://ollama.com and run:
 
 ```cmd
-ollama pull qwen2.5-coder:14b
+ollama pull qwen2.5-coder:7b
 ```
 
 Verify it works:
 ```cmd
-ollama run qwen2.5-coder:14b "say hello"
+ollama run qwen2.5-coder:7b "say hello"
 ```
 
 ---
@@ -173,7 +173,7 @@ Just copy the backup file back over the modified file.
 
 | Variable              | Default                | Effect                              |
 |-----------------------|------------------------|-------------------------------------|
-| `LOCAL_MODEL`         | `qwen2.5-coder:14b`    | Ollama model for all local agents   |
+| `LOCAL_MODEL`         | `qwen2.5-coder:7b`    | Ollama model for all local agents   |
 | `SUPERVISOR_MODEL`    | `claude-opus-4-5`      | Claude model for Supervisor         |
 | `ANTHROPIC_API_KEY`   | (none)                 | Required to use Claude Supervisor   |
 | `GIT_ENABLED`         | `true`                 | Auto-commit after each file write   |

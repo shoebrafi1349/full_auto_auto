@@ -30,29 +30,28 @@ STATE_PATH  = ROOT_DIR / "_agent" / "state.json"
 EVENTS_PATH = LOGS_DIR / "events.jsonl"
 
 # ── Per-agent backends and models ──────────────────────────────────────────────
-# ALL AGENTS: Ollama (local, free, no API keys, no quotas)
-# Switch individual agents to cloud providers later by changing these values
-# or setting the matching environment variable.
+# ALL AGENTS: Gemini 2.0 Flash (no Ollama, no local model needed)
+# Requires: GEMINI_API_KEY environment variable
 
 # Planner
-PLANNER_BACKEND = os.environ.get("PLANNER_BACKEND", "ollama")
-PLANNER_MODEL   = os.environ.get("PLANNER_MODEL",   "qwen2.5-coder:7b")
+PLANNER_BACKEND = os.environ.get("PLANNER_BACKEND", "gemini")
+PLANNER_MODEL   = os.environ.get("PLANNER_MODEL",   "gemini-2.0-flash")
 
 # Coder
-CODER_BACKEND   = os.environ.get("CODER_BACKEND",   "ollama")
-CODER_MODEL     = os.environ.get("CODER_MODEL",     "qwen2.5-coder:7b")
+CODER_BACKEND   = os.environ.get("CODER_BACKEND",   "gemini")
+CODER_MODEL     = os.environ.get("CODER_MODEL",     "gemini-2.0-flash")
 
-# Tester (syntax check only — model barely used)
-TESTER_BACKEND  = os.environ.get("TESTER_BACKEND",  "ollama")
-TESTER_MODEL    = os.environ.get("TESTER_MODEL",    "qwen2.5-coder:7b")
+# Tester (syntax check only — model barely used but still needs a backend)
+TESTER_BACKEND  = os.environ.get("TESTER_BACKEND",  "gemini")
+TESTER_MODEL    = os.environ.get("TESTER_MODEL",    "gemini-2.0-flash")
 
 # Fixer
-FIXER_BACKEND   = os.environ.get("FIXER_BACKEND",   "ollama")
-FIXER_MODEL     = os.environ.get("FIXER_MODEL",     "qwen2.5-coder:7b")
+FIXER_BACKEND   = os.environ.get("FIXER_BACKEND",   "gemini")
+FIXER_MODEL     = os.environ.get("FIXER_MODEL",     "gemini-2.0-flash")
 
-# Supervisor (switch to gemini/anthropic when you have a paid key)
-SUPERVISOR_BACKEND = os.environ.get("SUPERVISOR_BACKEND", "ollama")
-SUPERVISOR_MODEL   = os.environ.get("SUPERVISOR_MODEL",   "qwen2.5-coder:7b")
+# Supervisor (switch to anthropic when you have a paid Claude key)
+SUPERVISOR_BACKEND = os.environ.get("SUPERVISOR_BACKEND", "gemini")
+SUPERVISOR_MODEL   = os.environ.get("SUPERVISOR_MODEL",   "gemini-2.0-flash")
 
 # ── Legacy aliases (kept for backward compat) ──────────────────────────────────
 DEFAULT_LOCAL_MODEL      = TESTER_MODEL
