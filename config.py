@@ -30,25 +30,29 @@ STATE_PATH  = ROOT_DIR / "_agent" / "state.json"
 EVENTS_PATH = LOGS_DIR / "events.jsonl"
 
 # ── Per-agent backends and models ──────────────────────────────────────────────
-# Planner: GPT-4o — best at structured JSON planning
-PLANNER_BACKEND = os.environ.get("PLANNER_BACKEND", "openai")
-PLANNER_MODEL   = os.environ.get("PLANNER_MODEL",   "gpt-4o")
+# ALL AGENTS: Ollama (local, free, no API keys, no quotas)
+# Switch individual agents to cloud providers later by changing these values
+# or setting the matching environment variable.
 
-# Coder: OpenAI Codex / o4-mini — best at code generation
-CODER_BACKEND   = os.environ.get("CODER_BACKEND",   "openai-codex")
-CODER_MODEL     = os.environ.get("CODER_MODEL",     "o4-mini")
+# Planner
+PLANNER_BACKEND = os.environ.get("PLANNER_BACKEND", "ollama")
+PLANNER_MODEL   = os.environ.get("PLANNER_MODEL",   "qwen2.5-coder:7b")
 
-# Tester: Ollama local — free, no API cost, just does syntax checks
+# Coder
+CODER_BACKEND   = os.environ.get("CODER_BACKEND",   "ollama")
+CODER_MODEL     = os.environ.get("CODER_MODEL",     "qwen2.5-coder:7b")
+
+# Tester (syntax check only — model barely used)
 TESTER_BACKEND  = os.environ.get("TESTER_BACKEND",  "ollama")
-TESTER_MODEL    = os.environ.get("TESTER_MODEL",    "qwen2.5-coder:14b")
+TESTER_MODEL    = os.environ.get("TESTER_MODEL",    "qwen2.5-coder:7b")
 
-# Fixer: Gemini Flash — fast and cheap for debugging loops
-FIXER_BACKEND   = os.environ.get("FIXER_BACKEND",   "gemini")
-FIXER_MODEL     = os.environ.get("FIXER_MODEL",     "gemini-2.0-flash")
+# Fixer
+FIXER_BACKEND   = os.environ.get("FIXER_BACKEND",   "ollama")
+FIXER_MODEL     = os.environ.get("FIXER_MODEL",     "qwen2.5-coder:7b")
 
-# Supervisor: Gemini Flash (temporary) — switch to anthropic when ready
-SUPERVISOR_BACKEND = os.environ.get("SUPERVISOR_BACKEND", "gemini")
-SUPERVISOR_MODEL   = os.environ.get("SUPERVISOR_MODEL",   "gemini-2.0-flash")
+# Supervisor (switch to gemini/anthropic when you have a paid key)
+SUPERVISOR_BACKEND = os.environ.get("SUPERVISOR_BACKEND", "ollama")
+SUPERVISOR_MODEL   = os.environ.get("SUPERVISOR_MODEL",   "qwen2.5-coder:7b")
 
 # ── Legacy aliases (kept for backward compat) ──────────────────────────────────
 DEFAULT_LOCAL_MODEL      = TESTER_MODEL
@@ -115,4 +119,3 @@ def summary() -> dict:
         "max_fix_attempts":      MAX_FIX_ATTEMPTS,
         "max_supervisor_calls":  MAX_SUPERVISOR_CALLS,
     }
-

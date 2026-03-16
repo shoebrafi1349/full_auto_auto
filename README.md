@@ -111,7 +111,7 @@ Coder retries with supervisor guidance
 ```bash
 pip install ollama anthropic
 # Pull your local model
-ollama pull qwen2.5-coder:14b
+ollama pull qwen2.5-coder:7b
 # Set Claude API key (optional — only used when agents get stuck)
 export ANTHROPIC_API_KEY=sk-ant-...
 ```

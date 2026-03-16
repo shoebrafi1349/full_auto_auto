@@ -254,14 +254,18 @@ class OpenAICodexBackend(BaseLLMBackend):
 
 # ══════════════════════════════════════════════════════════════════════════════
 # Google Gemini  (Fixer + Supervisor temporarily)
+# Uses the new google-genai SDK (pip install google-genai)
+# NOT the deprecated google-generativeai package
 # ══════════════════════════════════════════════════════════════════════════════
 
 class GeminiBackend(BaseLLMBackend):
     """
-    Google Gemini via google-generativeai SDK.
+    Google Gemini via the new google-genai SDK.
+    Install: pip install google-genai
+
     Used by: Fixer, Supervisor (temporary until Anthropic key is ready)
     Default model: gemini-2.0-flash
-    Requires: GEMINI_API_KEY
+    Requires: GEMINI_API_KEY environment variable
     """
 
     def __init__(self, model: str = "gemini-2.0-flash"):
@@ -285,16 +289,20 @@ class GeminiBackend(BaseLLMBackend):
         full_prompt = f"{system}\n\n{prompt}" if system else prompt
 
         def _call():
-            import google.generativeai as genai
-            genai.configure(api_key=self._api_key)
-            model = genai.GenerativeModel(
-                model_name=self.model,
-                generation_config=genai.types.GenerationConfig(
+            from google import genai
+            from google.genai import types
+
+            client = genai.Client(api_key=self._api_key)
+            response = client.models.generate_content(
+                model=self.model,
+                contents=full_prompt,
+                config=types.GenerateContentConfig(
                     max_output_tokens=max_tokens,
                     temperature=temperature,
                 ),
             )
-            return model.generate_content(full_prompt)
+            client.close()
+            return response
 
         holder = self._thread_call(_call)
         dur = time.monotonic() - t0
@@ -306,13 +314,9 @@ class GeminiBackend(BaseLLMBackend):
         resp = holder["result"]
         try:
             text = resp.text or ""
-        except Exception:
-            # Some responses have parts instead of .text
-            try:
-                text = "".join(part.text for part in resp.parts if hasattr(part, "text"))
-            except Exception as e:
-                return LLMResponse("", self.model, len(prompt), 0, dur,
-                                   False, f"Could not extract text: {e}")
+        except Exception as e:
+            return LLMResponse("", self.model, len(prompt), 0, dur,
+                               False, f"Could not extract text: {e}")
 
         return LLMResponse(text, self.model, len(prompt), len(text), dur, bool(text))
 
@@ -377,7 +381,7 @@ class AnthropicBackend(BaseLLMBackend):
 class OllamaBackend(BaseLLMBackend):
     """Local Ollama — free, no API key needed. Used by Tester."""
 
-    def __init__(self, model: str = "qwen2.5-coder:14b"):
+    def __init__(self, model: str = "qwen2.5-coder:7b"):
         self.model = model
 
     async def complete(
@@ -458,7 +462,7 @@ def make_backend(
     if backend_type == "anthropic":
         return AnthropicBackend(model or "claude-opus-4-5")
     if backend_type == "ollama":
-        return OllamaBackend(model or "qwen2.5-coder:14b")
+        return OllamaBackend(model or "qwen2.5-coder:7b")
     if backend_type == "mock":
         return MockBackend(model or "mock", mock_responses)
     raise ValueError(f"Unknown backend: {backend_type!r}")
