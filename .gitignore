@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+logs/*.log
+logs/*.jsonl
+logs/session_summary.json
+_agent/backups/
+_agent/state.json
+.env

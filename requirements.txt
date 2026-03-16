@@ -1,0 +1,12 @@
+# ── LLM providers ─────────────────────────────────────────────────────────────
+openai>=1.30.0                 # Planner (GPT-4o) + Coder (o4-mini / Responses API)
+google-generativeai>=0.8.0     # Fixer + Supervisor (Gemini 2.0 Flash)
+anthropic>=0.25.0              # Supervisor — install now, activate later
+ollama>=0.1.0                  # Tester fallback (local, free)
+
+# ── Dashboard ──────────────────────────────────────────────────────────────────
+websockets>=12.0               # live dashboard WebSocket server
+
+# ── Testing ────────────────────────────────────────────────────────────────────
+pytest>=7.0.0
+pytest-asyncio>=0.23.0
